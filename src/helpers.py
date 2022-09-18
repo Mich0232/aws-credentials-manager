@@ -3,7 +3,7 @@ import shutil
 from pathlib import Path
 from typing import Dict
 
-from exceptions import AWSProfileManagerException
+from src.exceptions import AWSProfileManagerException
 
 
 def init():

@@ -2,17 +2,18 @@ import hashlib
 
 import click
 
-from helpers import init, read_store, write_store, store_credentials_file, use_credentials_file
+from src.helpers import init, read_store, write_store, store_credentials_file, use_credentials_file
 
 
 @click.group()
 def cli():
-    pass
+    click.echo("When will this run?")
 
 
 @click.command('init')
 def initialize():
     init()
+
 
 @click.command("add")
 @click.argument('path', type=click.Path())
@@ -64,7 +65,3 @@ cli.add_command(initialize)
 cli.add_command(add_file)
 cli.add_command(list_elements)
 cli.add_command(use_alias)
-
-
-if __name__ == "__main__":
-    cli()
