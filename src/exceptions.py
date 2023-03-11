@@ -1,3 +1,2 @@
-
 class AWSProfileManagerException(Exception):
     pass
