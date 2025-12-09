@@ -1,6 +1,6 @@
 [project]
 name = "aws_credentials_manager"
-version = "0.2.1"
+version = "0.3.0"
 description = ""
 authors = [{ name = "michaldrozdz", email = "mich0232@gmail.com" }]
 requires-python = ">=3.9,<4"
