@@ -77,6 +77,10 @@ def get_current_record(store: Store) -> Union[Record, None]:
             return record
 
 
+def is_current_record(store: Store, record: Record) -> bool:
+    return store.current_uuid == record.uuid
+
+
 def alias_exists(store: Store, alias: str) -> bool:
     aliases = [r.alias for r in store.records]
     return alias in aliases
@@ -100,3 +104,17 @@ def replace_credentials_file(content: bytes, backup: bool = True):
 
     with open(AWS_CREDENTIALS_FILE_PATH, "w", encoding="utf-8") as f:
         f.write(b64decode(content).decode(encoding="utf-8"))
+
+
+def check_drift_on_current_credentials(record: Record) -> bool:
+    current_content = read_file_content(AWS_CREDENTIALS_FILE_PATH)
+    if b64encode(current_content) != record.content:
+        return True
+    return False
+
+
+def check_record_for_drift(record: Record) -> bool:
+    current_content = read_file_content(record.path)
+    if b64encode(current_content) != record.content:
+        return True
+    return False

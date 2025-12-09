@@ -4,9 +4,12 @@ import click
 
 from acm.store.utils import (
     alias_exists,
+    check_drift_on_current_credentials,
+    check_record_for_drift,
     create_record,
     get_current_record,
     get_record_by_alias,
+    is_current_record,
     read_store,
     replace_credentials_file,
     write_store,
@@ -31,6 +34,20 @@ def use_alias(alias: str):
         raise click.ClickException(f"Alias `{alias}` does not exist.")
 
     record = get_record_by_alias(store=store, alias=alias)
+
+    if is_current_record(store=store, record=record):
+        if check_drift_on_current_credentials(record=record):
+            click.echo(
+                "Credentials file has drifted. Run `acm update {alias}` to update it."
+            )
+            return
+    else:
+        if check_record_for_drift(record=record):
+            click.echo(
+                "Credentials file has drifted. Run `acm update {alias}` to update it."
+            )
+            return
+
     store.current_uuid = record.uuid
 
     try:
@@ -55,6 +72,11 @@ def list_aliases():
 def show_current_credentials():
     store = read_store()
     current_record = get_current_record(store=store)
+
+    if check_drift_on_current_credentials(record=current_record):
+        click.echo(
+            "Credentials file has drifted. Run `acm update {alias}` to update it."
+        )
 
     content = b64decode(current_record.content).decode(encoding="utf-8")
     click.echo(content)
