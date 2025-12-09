@@ -1,12 +1,18 @@
+import shutil
 import uuid
-from base64 import b64encode
+from base64 import b64decode, b64encode
 from datetime import datetime
 from typing import Union
 
 import click
 from pydantic import ValidationError
 
-from acm.config import CONFIG_ROOT_PATH, STORE_FILE_PATH
+from acm.config import (
+    AWS_CREDENTIALS_FILE_PATH,
+    BACKUP_FILE_PATH,
+    CONFIG_ROOT_PATH,
+    STORE_FILE_PATH,
+)
 from acm.helpers import get_content_hash, read_file_content
 from acm.store.models import Record, Store
 
@@ -61,6 +67,16 @@ def get_record_by_alias(store: Store, alias: str) -> Union[Record, None]:
     return None
 
 
+def get_current_record(store: Store) -> Union[Record, None]:
+    current_uuid = store.current_uuid
+    if not current_uuid:
+        return None
+
+    for record in store.records:
+        if record.uuid == current_uuid:
+            return record
+
+
 def alias_exists(store: Store, alias: str) -> bool:
     aliases = [r.alias for r in store.records]
     return alias in aliases
@@ -76,3 +92,11 @@ def init_store():
         write_store(Store(records=[], version=0, current_uuid=""))
 
     click.echo("Store initialized successfully.")
+
+
+def replace_credentials_file(content: bytes, backup: bool = True):
+    if backup:
+        shutil.copy(AWS_CREDENTIALS_FILE_PATH, BACKUP_FILE_PATH)
+
+    with open(AWS_CREDENTIALS_FILE_PATH, "w", encoding="utf-8") as f:
+        f.write(b64decode(content).decode(encoding="utf-8"))

@@ -11,7 +11,7 @@ from acm.helpers import (
     use_credentials_file,
     write_store,
 )
-from acm.store.helpers import add_to_store, list_aliases
+from acm.store.helpers import add_to_store, list_aliases, show_current_credentials
 
 
 @click.group()
@@ -99,6 +99,8 @@ def list_v2():
 @v2.command("use")
 @click.argument("alias", type=str)
 def use_alias_v2(alias: str):
+    from acm.store.helpers import use_alias
+
     use_alias(alias=alias)
 
     click.echo(f"Now using: {alias}")
@@ -109,6 +111,11 @@ def init_v2():
     from acm.store.utils import init_store
 
     init_store()
+
+
+@v2.command("show")
+def show_v2():
+    show_current_credentials()
 
 
 cli.add_command(initialize)
