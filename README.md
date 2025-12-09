@@ -1,11 +1,17 @@
 ## AWS Credentials manager
 
-### Installing
 
-Add the project executable to PATH or create an alias
+### Building
 
 ```shell
-alias acm='sh /<project-path>/aws-credentials-manager/apm.sh'
+uv build
+```
+
+### Installing
+
+
+```shell
+python -m pip install dist/aws_credentials_manager-0.2.1-py3-none-any.whl
 ```
 
 Verify the installation
