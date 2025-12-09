@@ -37,6 +37,19 @@ def write_store(**config):
         store_file.writelines([f"{k}={v}\n" for k, v in config.items()])
 
 
+def set_currently_used_alias(alias: str):
+    with open(Path.home() / ".apm/current", "w+") as current_file:
+        current_file.write(alias)
+
+
+def get_currently_used_alias() -> str:
+    try:
+        with open(Path.home() / ".apm/current", "r") as current_file:
+            return current_file.read()
+    except FileNotFoundError:
+        return "default"
+
+
 def store_credentials_file(file_hash: str, content: bytes):
     config_dir_path = Path.home() / ".apm"
 

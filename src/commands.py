@@ -2,8 +2,10 @@ import hashlib
 
 from lib import click
 from src.helpers import (
+    get_currently_used_alias,
     init,
     read_store,
+    set_currently_used_alias,
     store_credentials_file,
     use_credentials_file,
     write_store,
@@ -37,9 +39,15 @@ def add_file(path, alias: str):
 @click.command("list")
 def list_elements():
     elements = read_store()
+    current_alias = get_currently_used_alias()
+
     for k, v in elements.items():
         if k.startswith("alias-"):
-            click.echo(k.replace("alias-", ""))
+            alias = k.replace("alias-", "")
+            if alias == current_alias:
+                click.secho(f"[X] {alias}")
+            else:
+                click.echo(f"[ ] {alias}")
 
 
 @click.command()
@@ -63,6 +71,7 @@ def use_alias(alias):
             break
 
     use_credentials_file(file_hash=hash)
+    set_currently_used_alias(alias=alias)
     click.echo(f"Now using: {alias}")
 
 
