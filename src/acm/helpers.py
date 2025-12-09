@@ -2,7 +2,7 @@ import shutil
 from pathlib import Path
 from typing import Dict
 
-from src.exceptions import AWSProfileManagerException
+from acm.exceptions import AWSProfileManagerException
 
 
 def init():
