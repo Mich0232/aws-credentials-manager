@@ -1,7 +1,8 @@
 import hashlib
 
-from lib import click
-from src.helpers import (
+import click
+
+from acm.helpers import (
     get_currently_used_alias,
     init,
     read_store,
