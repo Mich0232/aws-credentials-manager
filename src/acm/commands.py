@@ -11,6 +11,7 @@ from acm.helpers import (
     use_credentials_file,
     write_store,
 )
+from acm.store.helpers import add_to_store, list_aliases, show_current_credentials
 
 
 @click.group()
@@ -76,7 +77,49 @@ def use_alias(alias):
     click.echo(f"Now using: {alias}")
 
 
+@click.group("v2")
+def v2():
+    pass
+
+
+@v2.command("add")
+@click.argument("path", type=click.Path())
+@click.argument("alias", type=str)
+def add_file_v2(path, alias: str):
+    add_to_store(alias=alias, path=path)
+
+    click.echo(f"File stored successfully under '{alias}' alias.")
+
+
+@v2.command("list")
+def list_v2():
+    list_aliases()
+
+
+@v2.command("use")
+@click.argument("alias", type=str)
+def use_alias_v2(alias: str):
+    from acm.store.helpers import use_alias
+
+    use_alias(alias=alias)
+
+    click.echo(f"Now using: {alias}")
+
+
+@v2.command("init")
+def init_v2():
+    from acm.store.utils import init_store
+
+    init_store()
+
+
+@v2.command("show")
+def show_v2():
+    show_current_credentials()
+
+
 cli.add_command(initialize)
 cli.add_command(add_file)
 cli.add_command(list_elements)
 cli.add_command(use_alias)
+cli.add_command(v2)
