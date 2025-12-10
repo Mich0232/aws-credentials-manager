@@ -1,7 +1,10 @@
 from base64 import b64decode
+from typing import Union
 
 import click
 
+from acm.config import AWS_CREDENTIALS_FILE_PATH
+from acm.helpers import read_file_content
 from acm.store.utils import (
     alias_exists,
     check_drift_on_current_credentials,
@@ -12,6 +15,7 @@ from acm.store.utils import (
     is_current_record,
     read_store,
     replace_credentials_file,
+    update_record,
     write_store,
 )
 
@@ -59,14 +63,14 @@ def use_alias(alias: str):
     write_store(store=store)
 
 
-def list_aliases():
+def list_aliases(wide: bool = False):
     store = read_store()
 
     for record in store.records.values():
-        if record.uuid == store.current_uuid:
-            click.echo(f"[X] - {record.alias}")
-        else:
-            click.echo(f"[ ] - {record.alias}")
+        is_current = "X" if record.uuid == store.current_uuid else " "
+        suffix = f"- {record.path}" if wide else ""
+
+        click.echo(f"[{is_current}] - {record.alias} {suffix}")
 
 
 def show_current_credentials():
@@ -84,3 +88,22 @@ def show_current_credentials():
 
     content = b64decode(current_record.content).decode(encoding="utf-8")
     click.echo(content)
+
+
+def update_alias(alias: str, path: Union[str, None] = None, current: bool = False):
+    # TODO: Implement versioning
+    store = read_store()
+    record = get_record_by_alias(store=store, alias=alias)
+
+    if current:
+        content = read_file_content(path=AWS_CREDENTIALS_FILE_PATH)
+    elif not path:
+        content = read_file_content(path=record.path)
+    else:
+        content = read_file_content(path=path)
+
+    updated_record = update_record(record=record, content=content)
+    store.records[alias] = updated_record
+    write_store(store=store)
+
+    click.echo(f"Alias `{alias}` updated using `{path}`.")
