@@ -24,7 +24,7 @@ def add_to_store(alias: str, path: str):
         )
 
     record = create_record(alias=alias, path=path)
-    store.records.append(record)
+    store.records[alias] = record
     write_store(store=store)
 
 
@@ -62,7 +62,7 @@ def use_alias(alias: str):
 def list_aliases():
     store = read_store()
 
-    for record in store.records:
+    for record in store.records.values():
         if record.uuid == store.current_uuid:
             click.echo(f"[X] - {record.alias}")
         else:
@@ -72,6 +72,10 @@ def list_aliases():
 def show_current_credentials():
     store = read_store()
     current_record = get_current_record(store=store)
+
+    if not current_record:
+        click.echo("No credentials file is currently in use.")
+        return
 
     if check_drift_on_current_credentials(record=current_record):
         click.echo(
