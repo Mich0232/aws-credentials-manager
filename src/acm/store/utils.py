@@ -61,10 +61,7 @@ def create_record(alias: str, path: str) -> Record:
 
 
 def get_record_by_alias(store: Store, alias: str) -> Union[Record, None]:
-    for record in store.records:
-        if record.alias == alias:
-            return record
-    return None
+    return store.records.get(alias, None)
 
 
 def get_current_record(store: Store) -> Union[Record, None]:
@@ -72,7 +69,7 @@ def get_current_record(store: Store) -> Union[Record, None]:
     if not current_uuid:
         return None
 
-    for record in store.records:
+    for record in store.records.values():
         if record.uuid == current_uuid:
             return record
 
@@ -82,8 +79,7 @@ def is_current_record(store: Store, record: Record) -> bool:
 
 
 def alias_exists(store: Store, alias: str) -> bool:
-    aliases = [r.alias for r in store.records]
-    return alias in aliases
+    return alias in store.records.keys()
 
 
 def init_store():
@@ -93,7 +89,7 @@ def init_store():
         click.echo("Store file already exists. Skipping initialization.")
         return
     else:
-        write_store(Store(records=[], version=0, current_uuid=""))
+        write_store(Store(records={}, version=0, current_uuid=""))
 
     click.echo("Store initialized successfully.")
 

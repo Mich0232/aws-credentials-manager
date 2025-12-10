@@ -12,6 +12,6 @@ class Record(BaseModel):
 
 
 class Store(BaseModel):
-    records: list[Record]
+    records: dict[str, Record]
     current_uuid: str
     version: int
