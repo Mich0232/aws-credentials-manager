@@ -4,7 +4,7 @@ from typing import Union
 import click
 
 from acm.config import AWS_CREDENTIALS_FILE_PATH
-from acm.helpers import read_file_content
+from acm.files import read_file_content
 from acm.store.utils import (
     alias_exists,
     check_drift_on_current_credentials,
@@ -106,4 +106,4 @@ def update_alias(alias: str, path: Union[str, None] = None, current: bool = Fals
     store.records[alias] = updated_record
     write_store(store=store)
 
-    click.echo(f"Alias `{alias}` updated using `{path}`.")
+    click.echo(f"Alias `{alias}` updated.")

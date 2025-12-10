@@ -13,7 +13,7 @@ from acm.config import (
     CONFIG_ROOT_PATH,
     STORE_FILE_PATH,
 )
-from acm.helpers import get_content_hash, read_file_content
+from acm.files import get_content_hash, read_file_content
 from acm.store.models import Record, Store
 
 
