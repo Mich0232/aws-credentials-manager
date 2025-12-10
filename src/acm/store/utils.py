@@ -60,6 +60,13 @@ def create_record(alias: str, path: str) -> Record:
     )
 
 
+def update_record(record: Record, content: bytes) -> Record:
+    record.content = b64encode(content)
+    record.hash = get_content_hash(content)
+    record.updated_at = int(datetime.now().timestamp())
+    return record
+
+
 def get_record_by_alias(store: Store, alias: str) -> Union[Record, None]:
     return store.records.get(alias, None)
 
