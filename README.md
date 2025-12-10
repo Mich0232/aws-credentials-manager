@@ -7,11 +7,24 @@
 uv build
 ```
 
-### Installing
+### Install Globally
+
+Install pipx and link it's bin directory to PATH
+
+```shell
+brew install pipx
+pipx ensurepath
+```
+
+```shell
+pipx install dist/aws_credentials_manager-0.5.0-py3-none-any.whl
+```
+
+### Installing 
 
 
 ```shell
-python -m pip install dist/aws_credentials_manager-0.2.1-py3-none-any.whl
+python -m pip install dist/aws_credentials_manager-0.5.0-py3-none-any.whl
 ```
 
 Verify the installation
