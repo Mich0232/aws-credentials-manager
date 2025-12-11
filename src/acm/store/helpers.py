@@ -30,6 +30,7 @@ def add_to_store(alias: str, path: str):
     record = create_record(alias=alias, path=path)
     store.records[alias] = record
     write_store(store=store)
+    click.echo(f"File stored successfully under '{alias}' alias.")
 
 
 def use_alias(alias: str):
@@ -61,6 +62,7 @@ def use_alias(alias: str):
         return
 
     write_store(store=store)
+    click.echo(f"Now using: {alias}")
 
 
 def list_aliases(wide: bool = False):

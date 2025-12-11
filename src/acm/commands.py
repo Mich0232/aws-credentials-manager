@@ -22,8 +22,6 @@ def cli():
 def add(path, alias: str):
     add_to_store(alias=alias, path=path)
 
-    click.echo(f"File stored successfully under '{alias}' alias.")
-
 
 @cli.command("list")
 @click.option(
@@ -38,8 +36,6 @@ def list(output: str = "default"):
 @click.argument("alias", type=str)
 def use(alias: str):
     use_alias(alias=alias)
-
-    click.echo(f"Now using: {alias}")
 
 
 @cli.command("update")
