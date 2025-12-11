@@ -95,6 +95,10 @@ def update_alias(alias: str, path: Union[str, None] = None, current: bool = Fals
     store = read_store()
     record = get_record_by_alias(store=store, alias=alias)
 
+    if not record:
+        click.echo(f"Alias `{alias}` does not exist.")
+        return
+
     if current:
         content = read_file_content(path=AWS_CREDENTIALS_FILE_PATH)
     elif not path:
