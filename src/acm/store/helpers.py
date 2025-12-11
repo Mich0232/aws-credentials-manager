@@ -107,3 +107,17 @@ def update_alias(alias: str, path: Union[str, None] = None, current: bool = Fals
     write_store(store=store)
 
     click.echo(f"Alias `{alias}` updated.")
+
+
+def remove_alias(alias: str):
+    store = read_store()
+    if not alias_exists(store=store, alias=alias):
+        click.echo(f"Alias `{alias}` does not exist.")
+        return
+
+    record_to_remove = store.records.pop(alias, None)
+    if is_current_record(store=store, record=record_to_remove):
+        store.current_uuid = ""
+
+    write_store(store=store)
+    click.echo(f"Alias `{alias}` removed.")

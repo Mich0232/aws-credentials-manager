@@ -3,6 +3,7 @@ import click
 from acm.store.helpers import (
     add_to_store,
     list_aliases,
+    remove_alias,
     show_current_credentials,
     update_alias,
     use_alias,
@@ -52,6 +53,12 @@ def update(alias: str, path: str = None, current: bool = False):
         )
 
     update_alias(alias=alias, path=path, current=current)
+
+
+@cli.command("remove")
+@click.argument("alias", type=str)
+def remove(alias: str):
+    remove_alias(alias=alias)
 
 
 @cli.command("init")
