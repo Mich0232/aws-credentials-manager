@@ -60,10 +60,12 @@ def create_record(alias: str, path: str) -> Record:
     )
 
 
-def update_record(record: Record, content: bytes) -> Record:
+def update_record(record: Record, content: bytes, path: str = None) -> Record:
     record.content = b64encode(content)
     record.hash = get_content_hash(content)
     record.updated_at = int(datetime.now().timestamp())
+    if path:
+        record.path = path
     return record
 
 

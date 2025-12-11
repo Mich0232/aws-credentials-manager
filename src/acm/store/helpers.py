@@ -102,7 +102,7 @@ def update_alias(alias: str, path: Union[str, None] = None, current: bool = Fals
     else:
         content = read_file_content(path=path)
 
-    updated_record = update_record(record=record, content=content)
+    updated_record = update_record(record=record, content=content, path=path)
     store.records[alias] = updated_record
     write_store(store=store)
 
